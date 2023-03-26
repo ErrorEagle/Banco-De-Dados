@@ -1,3 +1,2 @@
 # Banco de dados
-Arquivos da Modelagem Lógica e Física do projeto
-Esse repositório deve ser privado, assim só membros poderão acessar.
+## Arquivos da Modelagem Lógica e Física do projeto. (MER-DER e o Script)
