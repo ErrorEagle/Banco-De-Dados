@@ -25,12 +25,10 @@ CREATE TABLE IF NOT EXISTS Empresa(
   idEmpresa INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   nomeResponsavel VARCHAR(60) NOT NULL,
   razaoSocial VARCHAR(80) NOT NULL,
-  CNPJ CHAR(13) NOT NULL UNIQUE,
-  telefone1 CHAR(11) NOT NULL,
-  telefone2 CHAR(11),
-  email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%.%@%.%'),
-  qtdTotem INT NOT NULL,
-  situacao boolean,
+  CNPJ VARCHAR(18) NOT NULL UNIQUE,
+  telefone1 VARCHAR(15) NOT NULL,
+  telefone2 VARCHAR(15),
+  email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%@%.%'),
   fkEndereco INT NOT NULL,
   CONSTRAINT ctFk_Endereco FOREIGN KEY (fkEndereco) REFERENCES Endereco(idEndereco)
   );
@@ -41,9 +39,9 @@ DROP TABLE IF EXISTS Funcionario;
 CREATE TABLE IF NOT EXISTS Funcionario (
   idFuncionario INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
   nome VARCHAR(60) NOT NULL,
-  email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%.%@%.%'),
+  email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%@%.%'),
   senha VARCHAR(60) NOT NULL,
-  telefone CHAR(11) NOT NULL,
+  telefone VARCHAR(15) NOT NULL,
   fkEmpresa INT NOT NULL,
   fkSupervisor INT,
   CONSTRAINT ctFk_EmpresaVinculado FOREIGN KEY (fkEmpresa) REFERENCES Empresa (idEmpresa),
@@ -147,26 +145,24 @@ DROP TABLE IF EXISTS medidasDesemp ;
                 
 -- Criação de cadastro empresa, endereço e funcionário
 
+
 insert into Endereco (cep, bairro, rua, numero, estado, cidade) values 
-("04244000","Sacomã","Estrada das Lágrimas",2005,"SP","São Paulo");
+('06150000',  'Metalurgicos',  'Av.Sarah Veloso', 1451,  'SP',  'Osasco');
 
--- insert into Endereco (cep, bairro, rua, numero, estado, cidade) values 
--- (${cep}, ${bairro}, ${rua}, ${numero}, ${estado}, ${cidade});
-
-insert into Empresa (nomeResponsavel, razaoSocial, CNPJ, telefone1, telefone2, email, qtdTotem, fkEndereco, situacao) values 
-("Lucas Barroso", "ErrorEagle", "021212", "11966425429", null, "a.a@a.a", 32, 1, 0);
+insert into Empresa (nomeResponsavel, razaoSocial, CNPJ, telefone1, telefone2, email, fkEndereco) values 
+("Lucas Barroso", "ErrorEagle", "123456789101234567", "11966425429", null, "aa@a.a", 32, 1);
 
 insert into Funcionario (email, senha, nome, telefone, fkEmpresa, fkSupervisor) values 
 ( "a.a@a.a", "lukinhas", "Lucas", "11363525", 1, null);
 
-
+ALTER TABLE Empresa DROP COLUMN situacao;
 -- Selecionar funcionário e empresa para verificação de contas já criadas
 	select f.nome, f.email
 		from Funcionario as f;
         
 -- Entrar Funcionario
-select f.email, f.senha
-		from Funcionario as f;
+	select f.email, f.senha
+			from Funcionario as f;
                 
 -- listar Empresa
 select e.*
@@ -177,5 +173,96 @@ select e.*
 update Empresa set situacao = 1 where email = "a.a@a.a"; 
 
 select * from Empresa;
+
+select * from Funcionario;
                 
-	
+	SELECT * FROM Endereco;
+select * FROM Empresa;
+DESC Empresa;
+SELECT * FROM Endereco;
+
+insert into Funcionario (email, senha, nome, telefone, fkEmpresa) values 
+    ('lucas.a@hotmail.com', 'lukinhas123', 'Lucas', '11966425429', 2);
+    
+-- SELECTS TESTE
+
+-- SELECT com INNER JOIN
+SELECT *
+FROM Empresa
+INNER JOIN Endereco ON Empresa.fkEndereco = Endereco.idEndereco;
+
+SELECT *
+FROM Funcionario
+INNER JOIN Empresa ON Funcionario.fkEmpresa = Empresa.idEmpresa;
+
+SELECT *
+FROM Totem
+INNER JOIN Empresa ON Totem.fkEmpresa = Empresa.idEmpresa;
+
+SELECT *
+FROM medidasDesemp
+INNER JOIN Totem ON medidasDesemp.fkTotem = Totem.idTotem;
+
+SELECT *
+FROM Log_Erro
+INNER JOIN medidasDesemp ON Log_Erro.fkTotem = medidasDesemp.fkTotem AND Log_Erro.fkDesempenho = medidasDesemp.idDesempenho;
+
+SELECT *
+FROM relatoriosManutencao
+INNER JOIN Funcionario ON relatoriosManutencao.fkFuncionario = Funcionario.idFuncionario
+INNER JOIN Totem ON relatoriosManutencao.fkTotem = Totem.idTotem;
+
+-- SELECT com LEFT JOIN
+SELECT *
+FROM Empresa
+LEFT JOIN Endereco ON Empresa.fkEndereco = Endereco.idEndereco;
+
+SELECT *
+FROM Funcionario
+LEFT JOIN Empresa ON Funcionario.fkEmpresa = Empresa.idEmpresa;
+
+SELECT *
+FROM Totem
+LEFT JOIN Empresa ON Totem.fkEmpresa = Empresa.idEmpresa;
+
+SELECT *
+FROM medidasDesemp
+LEFT JOIN Totem ON medidasDesemp.fkTotem = Totem.idTotem;
+
+SELECT *
+FROM Log_Erro
+LEFT JOIN medidasDesemp ON Log_Erro.fkTotem = medidasDesemp.fkTotem AND Log_Erro.fkDesempenho = medidasDesemp.idDesempenho;
+
+SELECT *
+FROM relatoriosManutencao
+LEFT JOIN Funcionario ON relatoriosManutencao.fkFuncionario = Funcionario.idFuncionario
+LEFT JOIN Totem ON relatoriosManutencao.fkTotem = Totem.idTotem;
+
+-- SELECT com RIGHT JOIN
+SELECT *
+FROM Endereco
+RIGHT JOIN Empresa ON Empresa.fkEndereco = Endereco.idEndereco;
+
+SELECT *
+FROM Empresa
+RIGHT JOIN Funcionario ON Funcionario.fkEmpresa = Empresa.idEmpresa;
+
+SELECT *
+FROM Empresa
+RIGHT JOIN Totem ON Totem.fkEmpresa = Empresa.idEmpresa;
+
+SELECT *
+FROM Totem
+RIGHT JOIN medidasDesemp ON medidasDesemp.fkTotem = Totem.idTotem;
+
+SELECT *
+FROM medidasDesemp
+RIGHT JOIN Log_Erro ON Log_Erro.fkTotem = medidasDesemp.fkTotem AND Log_Erro.fkDesempenho = medidasDesemp.idDesempenho;
+
+SELECT *
+FROM Funcionario
+RIGHT JOIN relatoriosManutencao ON relatoriosManutencao.fkFuncionario = Funcionario.idFuncionario
+RIGHT JOIN Totem ON relatoriosManutencao.fkTotem = Totem.idTotem;
+
+
+
