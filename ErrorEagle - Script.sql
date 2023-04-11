@@ -25,9 +25,9 @@ CREATE TABLE IF NOT EXISTS Empresa(
   idEmpresa INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   nomeResponsavel VARCHAR(60) NOT NULL,
   razaoSocial VARCHAR(80) NOT NULL,
-  CNPJ VARCHAR(18) NOT NULL UNIQUE,
-  telefone1 VARCHAR(15) NOT NULL,
-  telefone2 VARCHAR(15),
+  CNPJ CHAR(14) NOT NULL UNIQUE,
+  telefone1 CHAR(11) NOT NULL,
+  telefone2 CHAR(11),
   email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%@%.%'),
   fkEndereco INT NOT NULL,
   CONSTRAINT ctFk_Endereco FOREIGN KEY (fkEndereco) REFERENCES Endereco(idEndereco)
@@ -64,7 +64,7 @@ senha VARCHAR(60) NOT NULL
    Nome VARCHAR(45) NOT NULL,
    Sobrenome VARCHAR(45) NOT NULL,
    TelefoneContato CHAR(11) NOT NULL,
-   email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%.%@%.%'),
+   email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%@%.%'),
    MensagemUsuario VARCHAR(600) NOT NULL
    );
 
@@ -142,47 +142,16 @@ DROP TABLE IF EXISTS medidasDesemp ;
 /* ----------------------------------------- Selects usados nos models SQL Local --------------------------------------------- */
 
 
+SELECT * FROM Empresa;
+
+SELECT * FROM Funcionario;
                 
--- Criação de cadastro empresa, endereço e funcionário
-
-
-insert into Endereco (cep, bairro, rua, numero, estado, cidade) values 
-('06150000',  'Metalurgicos',  'Av.Sarah Veloso', 1451,  'SP',  'Osasco');
-
-insert into Empresa (nomeResponsavel, razaoSocial, CNPJ, telefone1, telefone2, email, fkEndereco) values 
-("Lucas Barroso", "ErrorEagle", "123456789101234567", "11966425429", null, "aa@a.a", 32, 1);
-
-insert into Funcionario (email, senha, nome, telefone, fkEmpresa, fkSupervisor) values 
-( "a.a@a.a", "lukinhas", "Lucas", "11363525", 1, null);
-
-ALTER TABLE Empresa DROP COLUMN situacao;
--- Selecionar funcionário e empresa para verificação de contas já criadas
-	select f.nome, f.email
-		from Funcionario as f;
-        
--- Entrar Funcionario
-	select f.email, f.senha
-			from Funcionario as f;
-                
--- listar Empresa
-select e.*
-		from Empresa as e
-			where e.situacao = 0;
-            
--- autenticar Empresa
-update Empresa set situacao = 1 where email = "a.a@a.a"; 
-
-select * from Empresa;
-
-select * from Funcionario;
-                
-	SELECT * FROM Endereco;
-select * FROM Empresa;
+SELECT * FROM Endereco;
+SELECT * FROM Empresa;
 DESC Empresa;
 SELECT * FROM Endereco;
 
-insert into Funcionario (email, senha, nome, telefone, fkEmpresa) values 
-    ('lucas.a@hotmail.com', 'lukinhas123', 'Lucas', '11966425429', 2);
+
     
 -- SELECTS TESTE
 
