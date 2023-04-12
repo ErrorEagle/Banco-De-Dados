@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS Funcionario (
   telefone VARCHAR(15) NOT NULL,
   fkEmpresa INT NOT NULL,
   fkSupervisor INT,
+  statusFuncionario tinyint,
   CONSTRAINT ctFk_EmpresaVinculado FOREIGN KEY (fkEmpresa) REFERENCES Empresa (idEmpresa),
   CONSTRAINT ctFk_Supervisor FOREIGN KEY (fkSupervisor) REFERENCES Funcionario (idFuncionario)
   );
