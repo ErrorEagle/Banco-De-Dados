@@ -41,10 +41,9 @@ CREATE TABLE IF NOT EXISTS Funcionario (
   nome VARCHAR(60) NOT NULL,
   email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%@%.%'),
   senha VARCHAR(60) NOT NULL,
-  telefone VARCHAR(15) NOT NULL,
+  telefone VARCHAR(11) NOT NULL,
   fkEmpresa INT NOT NULL,
   fkSupervisor INT,
-  statusFuncionario tinyint,
   CONSTRAINT ctFk_EmpresaVinculado FOREIGN KEY (fkEmpresa) REFERENCES Empresa (idEmpresa),
   CONSTRAINT ctFk_Supervisor FOREIGN KEY (fkSupervisor) REFERENCES Funcionario (idFuncionario)
   );
@@ -76,65 +75,128 @@ senha VARCHAR(60) NOT NULL
    idTotem INT PRIMARY KEY NOT NULL,
    disponibilidade VARCHAR(45) NOT NULL,
    SisOperacional VARCHAR(45) NOT NULL,
-   statusRede VARCHAR(45) NOT NULL,
-   tipoConexao VARCHAR(45) NOT NULL,
-   tipoDisco CHAR(3) NOT NULL,
-   totalDisco INT NOT NULL,
-   totalRam INT NOT NULL,
-   enderecoIP VARCHAR(15) NOT NULL,
+   arquitetura INT,
+   fabricante VARCHAR(45) NOT NULL,
+   hostName VARCHAR(45) NOT NULL,
    fkEmpresa INT NOT NULL,
    CONSTRAINT ctFk_EmpresaTotem FOREIGN KEY (fkEmpresa) REFERENCES Empresa (idEmpresa)
    );
 
 -- Criação da tabela medidas de Desempenho
-DROP TABLE IF EXISTS medidasDesemp ;
+DROP TABLE IF EXISTS relatoriosManutencao;
 
- CREATE TABLE IF NOT EXISTS medidasDesemp (
-   fkTotem INT NOT NULL,
-   idDesempenho INT NOT NULL,
-   usoRam DOUBLE NOT NULL,
-   usoCache DOUBLE NOT NULL,
-   taxaLeituraRam DOUBLE NOT NULL,
-   taxaEscritaRam DOUBLE NOT NULL,
-   usoCpu DOUBLE NOT NULL,
-   temperaturaCpu FLOAT NOT NULL,
-   tempoAtividade TIME NOT NULL,
-   usoDisco DOUBLE NOT NULL,
-   taxaLeituraDisco VARCHAR(45) NOT NULL,
-   taxaEscritaDisco VARCHAR(45) NOT NULL,
-   HoraLeitura DATETIME NOT NULL,
-   taxaUpload DOUBLE NOT NULL,
-   taxaDonwload DOUBLE NOT NULL,
-   PRIMARY KEY (fkTotem, idDesempenho),
-   CONSTRAINT ctFk_Totem FOREIGN KEY (fkTotem) REFERENCES Totem (idTotem)
-   );
+CREATE TABLE RelatoriosManutencao(
+titulo VARCHAR(45) NOT NULL,
+decricao VARCHAR(45) NOT NULL,
+resposavel VARCHAR(45) NOT NULL,
+fkFuncionario INT NOT NULL,
+CONSTRAINT CTfk_Funcionario FOREIGN KEY (fkFuncionario) REFERENCES Funcionario(idFuncionario),
+fkTotem INT NOT NULL,
+CONSTRAINT CTfk_Totem FOREIGN KEY (fkTotem) REFERENCES Totem(idTotem)
+);
 
--- Criação da tabela Log_Erro
- DROP TABLE IF EXISTS Log_Erro ;
-
- CREATE TABLE IF NOT EXISTS Log_Erro(
-  idLog_Erro INT NOT NULL,
-  TipoErro VARCHAR(45) NOT NULL,
-  Descricao VARCHAR(400) NOT NULL,
-  fkTotem INT NOT NULL,
-  fkDesempenho INT NOT NULL,
-  PRIMARY KEY (idLog_Erro),
-  CONSTRAINT ctFk_LogErro FOREIGN KEY (fkTotem, fkDesempenho) REFERENCES medidasDesemp (fkTotem, idDesempenho)
+ 
+DROP TABLE IF EXISTS Cpus;
+ CREATE TABLE Cpus (
+ idCpu INT PRIMARY KEY NOT NULL,
+ nome VARCHAR(45) NOT NULL,
+ microArquitetura VARCHAR(45) NOT NULL,
+ frequencia VARCHAR(45) NOT NULL,
+ usoAtencao DOUBLE,
+ usoUrgente DOUBLE,
+ usoCritico DOUBLE,
+ fkTotem INT NOT NULL,
+ FOREIGN KEY (fkTotem) REFERENCES Totem(idTotem)
  );
-
--- Criação da tabela relatórios de manutenca
- DROP TABLE IF EXISTS relatoriosManutencao;
-
- CREATE TABLE IF NOT EXISTS relatoriosManutencao(
-   fkFuncionario INT NOT NULL,
+ 
+ select * from Cpus;
+ 
+ DROP TABLE IF EXISTS AlertasCPU;
+ CREATE TABLE AlertasCPU (
+ criticidade VARCHAR(45) NOT NULL,
+ usoCPU DOUBLE,
+ tempoExecucao TIME,
+ horaLeitura DATETIME,
+ fkTotem INT NOT NULL,
+ CONSTRAINT fk_Totem FOREIGN KEY (fkTotem) REFERENCES Totem(idTotem),
+ fkCpus INT NOT NULL,
+ CONSTRAINT fk_Cpus FOREIGN KEY (fkCpus) REFERENCES Cpus(idCpu)
+ );
+ 
+ DROP TABLE IF EXISTS AlertasRam;
+ 
+ CREATE TABLE Ram (
+ idRam INT PRIMARY KEY NOT NULL,
+ totalRam DOUBLE,
+ usoAtencao DOUBLE,
+ usoUrgente DOUBLE,
+ usoCritico DOUBLE,
+ fkTotem INT NOT NULL,
+ FOREIGN KEY (fkTotem) REFERENCES Totem(idTotem)
+ );
+ 
+ DROP TABLE IF EXISTS AlertasRam;
+  CREATE TABLE AlertasRam (
+ criticidade VARCHAR(45) NOT NULL,
+ usoRam DOUBLE,
+ tempoExecucao TIME,
+ horaLeitura DATETIME,
+ fkTotem INT NOT NULL,
+ FOREIGN KEY (fkTotem) REFERENCES Totem(idTotem),
+ fkRam INT NOT NULL,
+ CONSTRAINT CTfk_Ram FOREIGN KEY (fkRam) REFERENCES Ram(idRam)
+ );
+ 
+ CREATE TABLE Disco (
+ idDisco INT PRIMARY KEY NOT NULL,
+ modelo VARCHAR(45) NOT NULL,
+ tipo VARCHAR(15) NOT NULL,
+ totalDisco DOUBLE,
+ usoAtencao DOUBLE,
+ usoUrgente DOUBLE,
+ usoCritico DOUBLE,
+ fkTotem INT NOT NULL,
+  FOREIGN KEY (fkTotem) REFERENCES Totem(idTotem)
+ );
+ 
+ CREATE TABLE AlertasDisco(
+ criticidade VARCHAR(45) NOT NULL,
+ usoDisco DOUBLE,
+ tempoExecucao TIME,
+ horaLeitura DATETIME,
+  fkTotem INT NOT NULL,
+  FOREIGN KEY (fkTotem) REFERENCES Totem(idTotem),
+  fkDisco INT NOT NULL,
+ CONSTRAINT CTfk_Disco FOREIGN KEY (fkDisco) REFERENCES Disco(idDisco)
+ );
+ 
+ CREATE TABLE Rede(
+ idRede INT PRIMARY KEY NOT NULL,
+ hostNome VARCHAR(45) NOT NULL,
+ dominio VARCHAR(45) NOT NULL,
+ servidoresDns DOUBLE,
+ downloadIdeal DOUBLE,
+ downloadUrgente DOUBLE,
+ downloadCritico DOUBLE,
+ uploadIdeal DOUBLE,
+ uploadUrgente DOUBLE,
+ uploadCritico DOUBLE,
    fkTotem INT NOT NULL,
-   Titulo VARCHAR(45) NOT NULL,
-   Descricao VARCHAR(450) NOT NULL,
-   responsavel VARCHAR(45) NOT NULL,
-   PRIMARY KEY (`fkFuncionario`, `fkTotem`),
-   CONSTRAINT ctFk_ResponsManuten FOREIGN KEY (fkFuncionario) REFERENCES Funcionario (idFuncionario),
-   CONSTRAINT ctfk_TotemReparado FOREIGN KEY (fkTotem) REFERENCES Totem (idTotem)
-  );
+ FOREIGN KEY (fkTotem) REFERENCES Totem(idTotem)
+ );
+ 
+ CREATE TABLE AlertasRede(
+ criticidade VARCHAR(45),
+ taxaDownload DOUBLE,
+ taxaUpload DOUBLE,
+ horaLeitura DATETIME,
+ fkTotem INT NOT NULL,
+ FOREIGN KEY (fkTotem) REFERENCES Totem(idTotem),
+ fkRede INT NOT NULL,
+ CONSTRAINT CTfk_Rede FOREIGN KEY (fkRede) REFERENCES Rede(idRede)
+ );
+ 
+
 
 
 
@@ -144,13 +206,24 @@ DROP TABLE IF EXISTS medidasDesemp ;
 
 
 SELECT * FROM Empresa;
-
 SELECT * FROM Funcionario;
-                
 SELECT * FROM Endereco;
 SELECT * FROM Empresa;
 DESC Empresa;
 SELECT * FROM Endereco;
+SELECT * FROM Totem;
+SELECT * FROM RelatoriosManutencao;
+SELECT * FROM Cpus;
+SELECT * FROM AlertasCPU;
+SELECT * FROM Ram;
+SELECT * FROM AlertasRam;
+SELECT * FROM Disco;
+SELECT * FROM AlertasDisco;
+SELECT * FROM Rede;
+SELECT * FROM AlertasRede;
+
+
+
 
 
     
