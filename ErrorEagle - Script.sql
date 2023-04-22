@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS Funcionario (
   email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%@%.%'),
   senha VARCHAR(60) NOT NULL,
   telefone VARCHAR(11) NOT NULL,
+  statusFuncionario TINYINT NOT NULL,
   fkEmpresa INT NOT NULL,
   fkSupervisor INT,
   CONSTRAINT ctFk_EmpresaVinculado FOREIGN KEY (fkEmpresa) REFERENCES Empresa (idEmpresa),
@@ -195,16 +196,20 @@ DROP TABLE IF EXISTS Cpus;
  fkRede INT NOT NULL,
  CONSTRAINT CTfk_Rede FOREIGN KEY (fkRede) REFERENCES Rede(idRede)
  );
- 
+ create table testeLoginMaquinas (
+  id int primary key auto_increment,
+  email VARCHAR(80) NOT NULL UNIQUE, CHECK(email LIKE '%@%.%'),
+  senha varchar(80)
+  ) auto_increment = 100;
 
 
 
-
-
+-- ALTER TABLE Funcionario add column statusFuncionario TINYINT NOT NULL;
+-- UPDATE Funcionario SET statusFuncionario = 1 where idFuncionario = 1 and idFuncionario = 2;
 
 /* ----------------------------------------- Selects usados nos models SQL Local --------------------------------------------- */
-
-
+select email, senha from Funcionario where email = "lukinhas@erroreagle.com"  and senha = "1234";
+select * from testeLoginMaquinas;
 SELECT * FROM Empresa;
 SELECT * FROM Funcionario;
 SELECT * FROM Endereco;
@@ -221,11 +226,6 @@ SELECT * FROM Disco;
 SELECT * FROM AlertasDisco;
 SELECT * FROM Rede;
 SELECT * FROM AlertasRede;
-
-
-
-
-
     
 -- SELECTS TESTE
 
@@ -307,5 +307,7 @@ FROM Funcionario
 RIGHT JOIN relatoriosManutencao ON relatoriosManutencao.fkFuncionario = Funcionario.idFuncionario
 RIGHT JOIN Totem ON relatoriosManutencao.fkTotem = Totem.idTotem;
 
-
+INSERT INTO testeLoginMaquinas (email, senha) VALUES ('carlos@gmail.com', 'outraSenha123');
+INSERT INTO testeLoginMaquinas (email, senha) VALUES ('ana@yahoo.com', 'senhaForte!@#');
+INSERT INTO testeLoginMaquinas (email, senha) VALUES ('pedro@outlook.com', '123456');
 
