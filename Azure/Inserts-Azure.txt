@@ -1,0 +1,62 @@
+---------- INSERT'S ENDERECO -----------
+
+INSERT INTO [dbo].[Endereco] (cep, bairro, rua, numero, estado, cidade)
+VALUES ('01001000', 'Sé', 'Praça da Sé', 1, 'SP', 'São Paulo');
+
+INSERT INTO [dbo].[Endereco] (cep, bairro, rua, numero, estado, cidade)
+VALUES ('20081902', 'Centro', 'Rua Primeiro de Março', 66, 'RJ', 'Rio de Janeiro');
+
+INSERT INTO [dbo].[Endereco] (cep, bairro, rua, numero, estado, cidade)
+VALUES ('04016002', 'Paraíso', 'Avenida Paulista', 1439, 'SP', 'São Paulo');
+
+---------- INSERT'S EMPRESA -----------
+
+INSERT INTO [dbo].[Empresa] (responsavel, razaoSocial, CNPJ, telefone, email, qtdTotem, statusEmpresa, fkEndereco) VALUES ('Fulano de Tal', 'Empresa ABC', '12345678901234', '1199999999', 'fulano@empresa.com', 10, 1, 1);
+
+INSERT INTO [dbo].[Empresa] (responsavel, razaoSocial, CNPJ, telefone, email, qtdTotem, statusEmpresa, fkEndereco) VALUES ('Ciclano da Silva', 'Empresa XYZ', '56789012345678', '1188888888', 'ciclano@empresa.com', 5, 0, 2);
+
+INSERT INTO [dbo].[Empresa] (responsavel, razaoSocial, CNPJ, telefone, email, qtdTotem, statusEmpresa, fkEndereco) VALUES ('Beltrano Souza', 'Empresa QWE', '90123456789012', '1177777777', 'beltrano@empresa.com', 20, 1, 3);
+
+---------- INSERT'S FUNCIONARIO -----------
+
+INSERT INTO [dbo].[Funcionario] (id, email, senha, nome, telefone, fkEmpresa, fkSupervisor)
+VALUES (1, 'joao@empresa.com', '123456', 'João da Silva', '1199999999', 1, NULL);
+
+INSERT INTO [dbo].[Funcionario] (id, email, senha, nome, telefone, fkEmpresa, fkSupervisor)
+VALUES (2, 'maria@empresa.com', 'abcdef', 'Maria Souza', '1188888888', 1, 1);
+
+INSERT INTO [dbo].[Funcionario] (id, email, senha, nome, telefone, fkEmpresa, fkSupervisor)
+VALUES (3, 'pedro@empresa.com', 'qwerty', 'Pedro Mendes', '1177777777', 1, 1);
+
+---------- INSERT'S ADMIN -----------
+
+INSERT INTO [dbo].[Admin] (email, senha)
+VALUES ('admin1@gmail.com', '123456');
+
+INSERT INTO [dbo].[Admin] (email, senha)
+VALUES ('admin2@hotmail.com', 'senha123');
+
+INSERT INTO [dbo].[Admin] (email, senha)
+VALUES ('admin3@yahoo.com', 'minhasenha');
+
+---------- INSERT'S FALE CONOSCO -----------
+
+INSERT INTO [dbo].[FaleConosco] (id, nome, sobrenome, telefone, email, mensagem)
+VALUES (1, 'Maria', 'Silva', '11999999999', 'maria.silva@gmail.com', 'Olá, gostaria de saber mais informações sobre o serviço de vocês.');
+
+INSERT INTO [dbo].[FaleConosco] (id, nome, sobrenome, telefone, email, mensagem)
+VALUES (2, 'João', 'Pereira', '21999999999', 'joao.pereira@hotmail.com', 'Bom dia, estou com problemas para acessar o meu cadastro.');
+
+INSERT INTO [dbo].[FaleConosco] (id, nome, sobrenome, telefone, email, mensagem)
+VALUES (3, 'Ana', 'Lima', '11988888888', 'ana.lima@yahoo.com', 'Olá, gostaria de deixar um feedback sobre o atendimento que recebi.');
+
+---------- INSERT'S TOTEM -----------
+
+INSERT INTO [dbo].[Totem] (hostName, fkEmpresa)
+VALUES ('totem-01', 1);
+
+INSERT INTO [dbo].[Totem] (hostName, fkEmpresa)
+VALUES ('totem-02', 1);
+
+INSERT INTO [dbo].[Totem] (hostName, fkEmpresa)
+VALUES ('totem-03', 2);

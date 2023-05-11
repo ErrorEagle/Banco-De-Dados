@@ -1,0 +1,56 @@
+CREATE TABLE  Endereco (
+  id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  cep CHAR(8) NOT NULL,
+  bairro VARCHAR(80) NOT NULL,
+  rua VARCHAR(80) NOT NULL,
+  numero INT NOT NULL,
+  estado CHAR(2) NOT NULL,
+  cidade VARCHAR(80) NOT NULL
+  );
+
+CREATE TABLE Empresa (
+  id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  responsavel VARCHAR(80) NOT NULL,
+  razaoSocial VARCHAR(80) NOT NULL,
+  CNPJ CHAR(14) UNIQUE NOT NULL,
+  telefone CHAR(11) NOT NULL,
+  email VARCHAR(80) UNIQUE NOT NULL CHECK(email LIKE '%@%.%'),
+  qtdTotem INT NOT NULL,
+  statusEmpresa TINYINT NOT NULL,
+  fkEndereco INT NOT NULL,
+  CONSTRAINT ctFkEnderecoEmpresa FOREIGN KEY (fkEndereco) REFERENCES Endereco (id)
+);
+
+CREATE TABLE  Funcionario (
+  id INT PRIMARY KEY NOT NULL,
+  email VARCHAR(80) UNIQUE NOT NULL CHECK(email LIKE '%@%.%'),
+  senha VARCHAR(60) NOT NULL,
+  nome VARCHAR(60) NOT NULL,
+  telefone CHAR(11) NOT NULL,
+  fkEmpresa INT NOT NULL,
+  fkSupervisor INT NULL,
+  CONSTRAINT ctFkEmpresaFuncionario FOREIGN KEY (fkEmpresa) REFERENCES Empresa (id),
+  CONSTRAINT ctfkSupervisor FOREIGN KEY (fkSupervisor) REFERENCES Funcionario (id)
+);
+
+CREATE TABLE FaleConosco (
+  id INT PRIMARY KEY NOT NULL,
+  nome VARCHAR(50) NOT NULL,
+  sobrenome VARCHAR(50) NOT NULL,
+  telefone CHAR(11) NOT NULL,
+  email VARCHAR(80) NOT NULL CHECK(email LIKE '%@%.%'),
+  mensagem VARCHAR(600) NOT NULL
+);
+
+CREATE TABLE Totem (
+  id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  hostName VARCHAR(45) UNIQUE NOT NULL,
+  fkEmpresa INT NOT NULL,
+  CONSTRAINT ctFkTotemEmpresa FOREIGN KEY (fkEmpresa) REFERENCES Empresa (id)
+);
+
+CREATE TABLE Admin (
+  id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  email VARCHAR(80) UNIQUE NOT NULL CHECK(email LIKE '%@%.%'),
+  senha VARCHAR(60) NOT NULL
+); 
