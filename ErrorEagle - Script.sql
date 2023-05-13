@@ -234,9 +234,9 @@ SELECT *
 FROM Empresa
 INNER JOIN Endereco ON Empresa.fkEndereco = Endereco.idEndereco;
 
-SELECT *
-FROM Funcionario
-INNER JOIN Empresa ON Funcionario.fkEmpresa = Empresa.idEmpresa;
+SELECT f.idFuncionario, f.nome, f.email, f.senha, f.telefone, f.fkEmpresa, f.fkSupervisor, e.razaoSocial
+FROM Funcionario as f
+INNER JOIN Empresa as e ON f.fkEmpresa = e.idEmpresa;
 
 SELECT *
 FROM Totem
