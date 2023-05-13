@@ -1,11 +1,7 @@
 
-DROP database IF exists error_eagle ;
-CREATE DATABASE IF NOT EXISTS error_eagle;
-USE error_eagle;
-DROP TABLE IF EXISTS Endereco ;
 
-CREATE TABLE IF NOT EXISTS Endereco (
-    id INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE Endereco (
+    id INT NOT NULL IDENTITY(1,1),
     cep CHAR(8) NOT NULL,
     bairro VARCHAR(100) NOT NULL,
     rua VARCHAR(100) NOT NULL,
@@ -17,10 +13,9 @@ CREATE TABLE IF NOT EXISTS Endereco (
 -- -----------------------------------------------------
 -- Table Empresa
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS Empresa ;
 
-CREATE TABLE IF NOT EXISTS Empresa (
-    id INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE Empresa (
+    id INT NOT NULL IDENTITY(1,1),
     responsavel VARCHAR(100) NOT NULL,
     razaoSocial VARCHAR(100) NOT NULL,
     CNPJ CHAR(14) NOT NULL UNIQUE,
@@ -37,9 +32,9 @@ CREATE TABLE IF NOT EXISTS Empresa (
 -- -----------------------------------------------------
 -- Table Funcionario
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS Funcionario ;
-CREATE TABLE IF NOT EXISTS Funcionario (
-  id INT NOT NULL AUTO_INCREMENT,
+
+CREATE TABLE Funcionario (
+  id INT NOT NULL IDENTITY(1,1),
   email VARCHAR(100) NOT NULL UNIQUE,
   CONSTRAINT chk_email_funcionario CHECK (email LIKE '%@%.%'),
   senha VARCHAR(100) NOT NULL,
@@ -60,9 +55,8 @@ CREATE TABLE IF NOT EXISTS Funcionario (
 -- -----------------------------------------------------
 -- Table FaleConosco
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS FaleConosco ;
 
-CREATE TABLE IF NOT EXISTS FaleConosco (
+CREATE TABLE FaleConosco (
     id INT NOT NULL,
     Nome VARCHAR(45) NOT NULL,
     Sobrenome VARCHAR(45) NOT NULL,
@@ -75,10 +69,9 @@ CREATE TABLE IF NOT EXISTS FaleConosco (
 -- -----------------------------------------------------
 -- Table Totem
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS Totem ;
 
-CREATE TABLE IF NOT EXISTS Totem (
-  id INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE Totem (
+  id INT NOT NULL IDENTITY(1,1),
   hostName VARCHAR(100) NOT NULL UNIQUE,
   fkEmpresa INT NOT NULL,
   PRIMARY KEY (id),
@@ -89,9 +82,8 @@ CREATE TABLE IF NOT EXISTS Totem (
 -- -----------------------------------------------------
 -- Table RelatoriosManutencao
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS RelatoriosManutencao ;
 
-CREATE TABLE IF NOT EXISTS RelatoriosManutencao (
+CREATE TABLE RelatoriosManutencao (
   fkFuncionario INT NOT NULL,
   fkTotem INT NOT NULL,
   Titulo VARCHAR(45) NOT NULL,
@@ -107,9 +99,9 @@ CREATE TABLE IF NOT EXISTS RelatoriosManutencao (
 -- -----------------------------------------------------
 -- Table Admin
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS Admin ;
-CREATE TABLE IF NOT EXISTS Admin (
-  id INT NOT NULL auto_increment,
+
+CREATE TABLE Admin (
+  id INT NOT NULL IDENTITY(1,1),
   email VARCHAR(80) NOT NULL UNIQUE,
   CONSTRAINT chk_email_admin CHECK (email LIKE '%@%.%'),
   senha VARCHAR(60) NOT NULL,
@@ -117,19 +109,18 @@ CREATE TABLE IF NOT EXISTS Admin (
 -- -----------------------------------------------------
 -- Table Componente
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS Componente ;
 
-CREATE TABLE IF NOT EXISTS Componente (
-    id INT NOT NULL AUTO_INCREMENT,
+
+CREATE TABLE Componente (
+    id INT NOT NULL IDENTITY(1,1),
     nome VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
 );
 -- -----------------------------------------------------
 -- Table Configuracao
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS Configuracao ;
 
-CREATE TABLE IF NOT EXISTS Configuracao (
+CREATE TABLE Configuracao (
   fkTotem INT NOT NULL,
   fkComponente INT NOT NULL,
   capacidade DOUBLE NOT NULL,
@@ -141,18 +132,15 @@ CREATE TABLE IF NOT EXISTS Configuracao (
   CONSTRAINT fk_Totem_has_TipoComponente_TipoComponente1
     FOREIGN KEY (fkComponente)
     REFERENCES Componente (id)
-    
-    );
-
+);
 
 
 -- -----------------------------------------------------
 -- Table Medida
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS Medida ;
 
-CREATE TABLE IF NOT EXISTS Medida (
-  id INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE Medida (
+  id INT NOT NULL IDENTITY(1,1),
   percentual DOUBLE NOT NULL,
   dataHora DATETIME NOT NULL DEFAULT now(),
   fkTotem INT NOT NULL,
@@ -161,16 +149,15 @@ CREATE TABLE IF NOT EXISTS Medida (
   CONSTRAINT fk_Medidas_Configuracao1
     FOREIGN KEY (fkTotem , fkComponente)
     REFERENCES Configuracao (fkTotem , fkComponente)
-    
     );
 
 -- -----------------------------------------------------
 -- Table TipoAlerta
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS TipoAlerta ;
 
-CREATE TABLE IF NOT EXISTS TipoAlerta (
-    id INT NOT NULL AUTO_INCREMENT,
+
+CREATE TABLE TipoAlerta (
+    id INT NOT NULL IDENTITY(1,1),
     Criticidade VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
 );
@@ -178,9 +165,9 @@ CREATE TABLE IF NOT EXISTS TipoAlerta (
 -- -----------------------------------------------------
 -- Table Limite
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS Limite ;
 
-CREATE TABLE IF NOT EXISTS Limite (
+
+CREATE TABLE Limite (
   fkComponente INT NOT NULL,
   fkTipoAlerta INT NOT NULL,
   maximo DOUBLE NOT NULL,
@@ -192,17 +179,15 @@ CREATE TABLE IF NOT EXISTS Limite (
 	CONSTRAINT fk_TipoComponente_has_tiposAlertas_tiposAlertas1
     FOREIGN KEY (fkTipoAlerta)
     REFERENCES TipoAlerta (id)
-    
     );
 
 
 -- -----------------------------------------------------
 -- Table MedidaRede
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS MedidaRede ;
 
-CREATE TABLE IF NOT EXISTS MedidaRede (
-  id INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE MedidaRede (
+  id INT NOT NULL IDENTITY(1,1),
   upload DOUBLE NOT NULL,
   donwload DOUBLE NOT NULL,
   fkTotem INT NOT NULL,
