@@ -84,18 +84,22 @@ CREATE TABLE Totem (
 -- -----------------------------------------------------
 
 CREATE TABLE RelatoriosManutencao (
+  id INT NOT NULL identity(1,1),
   fkFuncionario INT NOT NULL,
   fkTotem INT NOT NULL,
-  Titulo VARCHAR(45) NOT NULL,
-  Descricao VARCHAR(450) NOT NULL,
-  PRIMARY KEY (fkFuncionario, fkTotem),
+  titulo VARCHAR(200) NOT NULL,
+  descricaoIncidente VARCHAR(800) NOT NULL,
+  descricaoManutencao VARCHAR(800) NOT NULL,
+  dataManutencao DATETIME NOT NULL,
+  dataRelatorio DATETIME NOT NULL,
+  PRIMARY KEY (id, fkFuncionario, fkTotem),
   CONSTRAINT fk_Funcionario_has_Totem_Funcionario1
     FOREIGN KEY (fkFuncionario)
     REFERENCES Funcionario (id),
   CONSTRAINT fk_Funcionario_has_Totem_Totem1
     FOREIGN KEY (fkTotem)
     REFERENCES Totem (id)
-    );
+);
 -- -----------------------------------------------------
 -- Table Admin
 -- -----------------------------------------------------
@@ -166,7 +170,6 @@ CREATE TABLE TipoAlerta (
 -- Table Limite
 -- -----------------------------------------------------
 
-
 CREATE TABLE Limite (
   fkComponente INT NOT NULL,
   fkTipoAlerta INT NOT NULL,
@@ -183,17 +186,18 @@ CREATE TABLE Limite (
 
 
 -- -----------------------------------------------------
--- Table MedidaRede
+-- Table situacaoTotem
 -- -----------------------------------------------------
 
-CREATE TABLE MedidaRede (
-  id INT NOT NULL IDENTITY(1,1),
-  upload DOUBLE NOT NULL,
-  donwload DOUBLE NOT NULL,
+CREATE TABLE  situacaoTotem (
+  id INT NOT NULL identity(1,1),
+  mensagem VARCHAR(200) NOT NULL,
+  media float not NULL,
+  datahora DATETIME NOT NULL,
   fkTotem INT NOT NULL,
   fkComponente INT NOT NULL,
   PRIMARY KEY (id),
-  CONSTRAINT fk_MedidaRede_Configuracao1
+  CONSTRAINT fk_situacaoTotem_Configuracao1
     FOREIGN KEY (fkTotem , fkComponente)
     REFERENCES Configuracao (fkTotem , fkComponente)
-    );
+);

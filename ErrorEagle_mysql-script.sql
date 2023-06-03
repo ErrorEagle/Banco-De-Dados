@@ -92,18 +92,23 @@ CREATE TABLE IF NOT EXISTS Totem (
 DROP TABLE IF EXISTS RelatoriosManutencao ;
 
 CREATE TABLE IF NOT EXISTS RelatoriosManutencao (
+  id INT NOT NULL AUTO_INCREMENT,
   fkFuncionario INT NOT NULL,
   fkTotem INT NOT NULL,
-  Titulo VARCHAR(45) NOT NULL,
-  Descricao VARCHAR(450) NOT NULL,
-  PRIMARY KEY (fkFuncionario, fkTotem),
+  titulo VARCHAR(200) NOT NULL,
+  descricaoIncidente VARCHAR(800) NOT NULL,
+  descricaoManutencao VARCHAR(800) NOT NULL,
+  dataManutencao DATETIME NOT NULL,
+  dataRelatorio DATETIME NOT NULL,
+  PRIMARY KEY (id, fkFuncionario, fkTotem),
   CONSTRAINT fk_Funcionario_has_Totem_Funcionario1
     FOREIGN KEY (fkFuncionario)
     REFERENCES Funcionario (id),
   CONSTRAINT fk_Funcionario_has_Totem_Totem1
     FOREIGN KEY (fkTotem)
     REFERENCES Totem (id)
-    );
+);
+
 -- -----------------------------------------------------
 -- Table Admin
 -- -----------------------------------------------------
@@ -173,6 +178,23 @@ CREATE TABLE IF NOT EXISTS TipoAlerta (
     id INT NOT NULL AUTO_INCREMENT,
     Criticidade VARCHAR(50) NOT NULL,
     PRIMARY KEY (id)
+);
+
+-- ---------------------------------------------
+-- Tabela situacaoTotem 
+-- ---------------------------------------------
+
+CREATE TABLE if not exists situacaoTotem (
+  id INT NOT NULL AUTO_INCREMENT,
+  mensagem VARCHAR(200) NOT NULL,
+  media DOUBLE NOT NULL,
+  datahora DATETIME NOT NULL,
+  fkTotem INT NOT NULL,
+  fkComponente INT NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_situacaoTotem_Configuracao1
+    FOREIGN KEY (fkTotem , fkComponente)
+    REFERENCES Configuracao (fkTotem , fkComponente)
 );
 
 -- -----------------------------------------------------

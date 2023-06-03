@@ -1,0 +1,17 @@
+drop table [dbo].[componente];
+drop table [dbo].[configuracao];
+drop table [dbo].[Totem];
+drop table [dbo].[Funcionario];
+drop table [dbo].[Empresa];
+drop table [dbo].[Endereco];
+drop table [dbo].[Admin];
+drop table [dbo].[FaleConosco];
+
+delete [dbo].[componente] where id <> 0;
+delete [dbo].[Empresa] where id <> 0;
+delete [dbo].[configuracao] where id <> 0;
+delete [dbo].[Funcionario] where id <> 0;
+delete [dbo].[Totem] where id <> 0;
+delete [dbo].[Endereco] where id <> 0;
+delete [dbo].[Admin] where id <> 0;
+delete [dbo].[FaleConosco] where id <> 0;
